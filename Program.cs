@@ -15,15 +15,25 @@ public static class Program
 {
     public static void Main()
     {
-        Raylib.InitWindow(800, 450, "Crazy Hit Arena");
+        Raylib.InitWindow(1024, 768, "Crazy Hit Arena");
         int sFont = 20;
         int xCenter = Raylib.GetScreenWidth() / 2;
         int yCenter = Raylib.GetScreenHeight() / 2;
         int numOfEnemies = 5;
+        Random rnd =  new Random();
         Player player = new Player(new Vector2(xCenter, yCenter));
         List<Bullet> bullets = new List<Bullet>();
-        List<Enemy> enemies = new List<Enemy>();
         State state = State.Start;
+        
+        List<Enemy> enemies = new List<Enemy>();
+        for (int i = 0; i < numOfEnemies; i++)
+        {
+            Vector2 spawnPos = new Vector2(
+                rnd.Next(0, Raylib.GetScreenWidth() - 20),
+                rnd.Next(0, Raylib.GetScreenHeight() - 20)
+            );
+            enemies.Add(new Warrior(spawnPos));
+        }
 
         Raylib.SetTargetFPS(60);
 
@@ -51,11 +61,12 @@ public static class Program
             {
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.RayWhite);
-
-                for (int i = numOfEnemies - 1; i >= 0; i--)
+                
+                for (int i = 0; i < enemies.Count; i++)
                 {
-                    
+                    enemies[i].Draw();
                 }
+                
                 
                 if (Raylib.IsMouseButtonPressed(MouseButton.Left))
                 {
@@ -67,7 +78,7 @@ public static class Program
                     bullets[i].Update(dt);
                     bullets[i].Draw();
 
-                    if (bullets[i].Position.X < 0 || bullets[i].Position.X > 800 || bullets[i].Position.Y < 0 || bullets[i].Position.Y > 450)
+                    if (bullets[i].Position.X < 0 || bullets[i].Position.X > Raylib.GetScreenWidth() || bullets[i].Position.Y < 0 || bullets[i].Position.Y > Raylib.GetScreenHeight())
                     {
                         bullets.RemoveAt(i);
                     }

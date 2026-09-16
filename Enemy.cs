@@ -5,24 +5,24 @@ namespace crazy_s_hit_arena;
 
 abstract class Enemy
 {
-    protected Vector2 position;
-    protected Vector2 size;
-    protected int health;
-    protected Color color;
+    public Vector2 Position;
+    public Vector2 Size;
+    public int Health;
+    public Color Color;
 
     public void Draw()
     {
-        Raylib.DrawRectangleV(position, size, color);
+        Raylib.DrawRectangleV(Position, Size, Color);
     }
 }
 
 class Warrior : Enemy
 {
-    public Warrior()
+    public Warrior(Vector2 startPosition)
     {
-        size.X = 20;
-        size.Y = 20;
-        health = 100;
-        color = Color.Green;
+        Position = startPosition;
+        Size = new Vector2(20, 20);
+        Health = 100;
+        Color = Color.Red;
     }
 }
