@@ -20,6 +20,7 @@ public static class Program
         int xCenter = Raylib.GetScreenWidth() / 2;
         int yCenter = Raylib.GetScreenHeight() / 2;
         int numOfEnemies = 5;
+        int Score = 0;
         Random rnd =  new Random();
         Player player = new Player(new Vector2(xCenter, yCenter));
         List<Bullet> bullets = new List<Bullet>();
@@ -61,7 +62,7 @@ public static class Program
             {
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.RayWhite);
-                
+                Raylib.DrawText($"Score : {Score}",  20, 20, sFont, Color.Orange);
                 for (int i = 0; i < enemies.Count; i++) enemies[i].Draw();
                 
                 
@@ -76,14 +77,19 @@ public static class Program
                     if (bullets[i].Position.X < 0 || bullets[i].Position.X > Raylib.GetScreenWidth() || bullets[i].Position.Y < 0 || bullets[i].Position.Y > Raylib.GetScreenHeight())
                     {
                         bullets.RemoveAt(i);
+                        continue;
                     }
 
                     for (int j = enemies.Count - 1; j >= 0; j--)
                     {
                         if (Raylib.CheckCollisionCircleRec(bullets[i].Position, 5, enemies[j].GetRect()))
                         {
-                            Console.WriteLine("Nice shot");
-                            enemies.RemoveAt(j);
+                            enemies[j].takeDamage(20);
+                            if (enemies[j].Health <= 0)
+                            {
+                                enemies.RemoveAt(j);
+                                Score++;
+                            }
                             bullets.RemoveAt(i);
                             break;
                         }

@@ -19,6 +19,11 @@ abstract class Enemy
     {
         Raylib.DrawRectangleV(Position, Size, Color);
     }
+
+    public void takeDamage(int takeDamage)
+    {
+        Health = Health - takeDamage;
+    }
 }
 
 class Warrior : Enemy
