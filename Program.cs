@@ -62,16 +62,11 @@ public static class Program
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.RayWhite);
                 
-                for (int i = 0; i < enemies.Count; i++)
-                {
-                    enemies[i].Draw();
-                }
+                for (int i = 0; i < enemies.Count; i++) enemies[i].Draw();
                 
                 
-                if (Raylib.IsMouseButtonPressed(MouseButton.Left))
-                {
-                    bullets.Add(new Bullet(player.Position, Raylib.GetMousePosition()));
-                }
+                if (Raylib.IsMouseButtonPressed(MouseButton.Left)) bullets.Add(new Bullet(player.Position, Raylib.GetMousePosition()));
+                
 
                 for (int i = bullets.Count - 1; i >= 0; i--)
                 {
@@ -81,6 +76,17 @@ public static class Program
                     if (bullets[i].Position.X < 0 || bullets[i].Position.X > Raylib.GetScreenWidth() || bullets[i].Position.Y < 0 || bullets[i].Position.Y > Raylib.GetScreenHeight())
                     {
                         bullets.RemoveAt(i);
+                    }
+
+                    for (int j = enemies.Count - 1; j >= 0; j--)
+                    {
+                        if (Raylib.CheckCollisionCircleRec(bullets[i].Position, 5, enemies[j].GetRect()))
+                        {
+                            Console.WriteLine("Nice shot");
+                            enemies.RemoveAt(j);
+                            bullets.RemoveAt(i);
+                            break;
+                        }
                     }
                 }
 

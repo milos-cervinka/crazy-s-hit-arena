@@ -9,6 +9,11 @@ abstract class Enemy
     public Vector2 Size;
     public int Health;
     public Color Color;
+    
+    public Rectangle GetRect()
+    {
+        return new Rectangle(Position.X, Position.Y, Size.X, Size.Y);
+    }
 
     public void Draw()
     {
