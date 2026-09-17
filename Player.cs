@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Reflection.Metadata.Ecma335;
 using Raylib_cs;
 
 namespace crazy_s_hit_arena;
@@ -25,13 +26,9 @@ public class Player
         
         if (input.LengthSquared() > 0)
         {
+            if (!((Position.X + 20) > Raylib.GetScreenWidth()) &&  !(Position.X < 20))
             Position += Vector2.Normalize(input) * Speed * dt;
         }
-    }
-
-    public Vector2 GetPosition()
-    {
-        return Position;
     }
 
     public void Draw()

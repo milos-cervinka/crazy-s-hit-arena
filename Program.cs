@@ -13,16 +13,20 @@ public enum State
 
 public static class Program
 {
+    public static (int X, int Y) GetPos(int divider = 1)
+    {
+        return (Raylib.GetScreenWidth() / divider, Raylib.GetScreenHeight() / divider);
+    }
+    
     public static void Main()
     {
         Raylib.InitWindow(1024, 768, "Crazy Hit Arena");
+        int press_counter = 1;
         int sFont = 20;
-        int xCenter = Raylib.GetScreenWidth() / 2;
-        int yCenter = Raylib.GetScreenHeight() / 2;
         int numOfEnemies = 5;
         int Score = 0;
         Random rnd =  new Random();
-        Player player = new Player(new Vector2(xCenter, yCenter));
+        Player player = new Player(new Vector2(GetPos(2).X, GetPos(2).Y));
         List<Bullet> bullets = new List<Bullet>();
         State state = State.Start;
         
@@ -30,11 +34,12 @@ public static class Program
         for (int i = 0; i < numOfEnemies; i++)
         {
             Vector2 spawnPos = new Vector2(
-                rnd.Next(0, Raylib.GetScreenWidth() - 20),
-                rnd.Next(0, Raylib.GetScreenHeight() - 20)
+                rnd.Next(0, GetPos().X - 20),
+                rnd.Next(0, GetPos().Y - 20)
             );
             enemies.Add(new Warrior(spawnPos));
         }
+        
 
         Raylib.SetTargetFPS(60);
 
@@ -46,12 +51,27 @@ public static class Program
             {
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.RayWhite);
-                Raylib.DrawText("Crazy (S)hit Arena", (xCenter - sFont - 80), (yCenter - sFont), sFont, Color.LightGray);
-                Rectangle button = new Rectangle(xCenter - 100, yCenter + 20, 200, 100);
+                Raylib.DrawText("Crazy (S)hit Arena", (GetPos(2).X - sFont - 80), (GetPos(2).Y - sFont), sFont, Color.LightGray);
+                Rectangle button = new Rectangle(GetPos(2).X - 100, GetPos(2).Y + 20, 200, 100);
                 Raylib.DrawRectangleRec(button, Color.White);
-                Raylib.DrawRectangleLines(xCenter - 100, yCenter + 20, 200, 100, Color.LightGray);
-                Raylib.DrawText("Play", xCenter - 20, yCenter + 60, sFont, Color.Orange);
-
+                Raylib.DrawRectangleLinesEx(button, 2, Color.DarkBlue);
+                Raylib.DrawText("Play", GetPos(2).X - 20, GetPos(2).Y + 60, sFont, Color.Orange);
+                Raylib.DrawText("Press \'f\' fullscreen",  GetPos(2).X - 100, Raylib.GetScreenHeight() - 50, sFont, Color.Orange);
+                
+                if (Raylib.IsKeyPressed(KeyboardKey.F))
+                {
+                    if (press_counter % 2 == 1)
+                    {
+                        Raylib.ToggleFullscreen();
+                        press_counter++;
+                    }
+                    else
+                    {
+                        Raylib.ToggleFullscreen();
+                        press_counter++;
+                    }
+                }
+                
                 if (Raylib.IsMouseButtonPressed(MouseButton.Left))
                 {
                     Vector2 pos = Raylib.GetMousePosition();
@@ -103,7 +123,7 @@ public static class Program
             {
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.RayWhite);
-                Raylib.DrawText("end", xCenter, yCenter, sFont, Color.Orange);
+                Raylib.DrawText("end", GetPos(2).X, GetPos(2).Y, sFont, Color.Orange);
             }
             else
             {
